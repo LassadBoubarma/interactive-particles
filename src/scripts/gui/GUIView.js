@@ -26,26 +26,68 @@ export default class GUIView {
 	}
 
 	initControlKit() {
-		this.controlKit = new ControlKit();
-		this.controlKit.addPanel({ width: 300, enable: false })
+	const lang = localStorage.getItem("lang") || "en";
 
-		.addGroup({label: 'Touch', enable: true })
-		.addCanvas({ label: 'trail', height: 64 })
-		.addSlider(this, 'touchRadius', 'rangeRadius', { label: 'radius', onChange: this.onTouchChange.bind(this) })
-		
-		.addGroup({label: 'Particles', enable: true })
-		// .addCheckbox(this, 'particlesHitArea', { label: 'hit area', onChange: this.onParticlesChange.bind(this) })
-		.addSlider(this, 'particlesRandom', 'rangeRandom', { label: 'random', onChange: this.onParticlesChange.bind(this) })
-		.addSlider(this, 'particlesDepth', 'rangeDepth', { label: 'depth', onChange: this.onParticlesChange.bind(this) })
-		.addSlider(this, 'particlesSize', 'rangeSize', { label: 'size', onChange: this.onParticlesChange.bind(this) })
+	const translations = {
+		en: {
+			panel: "Control Panel",
+			touch: "Touch",
+			trail: "Trail",
+			radius: "Radius",
+			particles: "Particles",
+			random: "Random",
+			depth: "Depth",
+			size: "Size"
+		},
+		pt: {
+			panel: "Painel de Controle",
+			touch: "Toque",
+			trail: "Trilha",
+			radius: "Raio",
+			particles: "Partículas",
+			random: "Aleatório",
+			depth: "Profundidade",
+			size: "Tamanho"
+		}
+	};
 
-		// store reference to canvas
-		const component = this.controlKit.getComponentBy({ label: 'trail' });
-		if (!component) return;
+	const t = translations[lang];
 
-		this.touchCanvas = component._canvas;
-		this.touchCtx = this.touchCanvas.getContext('2d');
-	}
+	// remove old control panel
+	const oldPanel = document.querySelector(".controlKit");
+	if (oldPanel) oldPanel.remove();
+
+	this.controlKit = new ControlKit();
+	const panel = this.controlKit.addPanel({ label: t.panel, width: 300, enable: false });
+
+	panel.addGroup({ label: t.touch, enable: true })
+		.addCanvas({ label: t.trail, height: 64 })
+		.addSlider(this, 'touchRadius', 'rangeRadius', {
+			label: t.radius,
+			onChange: this.onTouchChange.bind(this)
+		});
+
+	panel.addGroup({ label: t.particles, enable: true })
+		.addSlider(this, 'particlesRandom', 'rangeRandom', {
+			label: t.random,
+			onChange: this.onParticlesChange.bind(this)
+		})
+		.addSlider(this, 'particlesDepth', 'rangeDepth', {
+			label: t.depth,
+			onChange: this.onParticlesChange.bind(this)
+		})
+		.addSlider(this, 'particlesSize', 'rangeSize', {
+			label: t.size,
+			onChange: this.onParticlesChange.bind(this)
+		});
+
+	// store canvas
+	const component = this.controlKit.getComponentBy({ label: t.trail });
+	if (!component) return;
+
+	this.touchCanvas = component._canvas;
+	this.touchCtx = this.touchCanvas.getContext('2d');
+}
 
 	initStats() {
 		this.stats = new Stats();
