@@ -14,6 +14,18 @@ A tutorial demonstrating how to draw a large number of particles with Three.js a
 - Run `npm start`
 - Build `npm run build`
 
+## ⚠️ Node Version Compatibility
+
+This project is not compatible with Node.js v17 or higher due to OpenSSL 3 breaking changes.
+
+To run it properly, use **Node.js v16**:
+
+```bash
+nvm install 16
+nvm use 16
+npm install
+npm start
+
 ## Libraries
 - [ControlKit](https://github.com/brunoimbrizi/controlkit.js) - GUI
 - [gsap](https://www.npmjs.com/package/gsap) - animation platform
